@@ -3,7 +3,10 @@ import type { Goal, GoalResponse } from "../types/goal"
 import { createGameBoard } from "../views/modules/createGameBoard";
 
 class GameController {
-    private readonly numCards: number = 10
+    private readonly numCards: number = 2
+    private arrFlipped: HTMLElement[] = []
+    private pairs: number = 0
+    private isChecking: boolean = false
 
     public async initGame(): Promise<HTMLElement> {
         const data: GoalResponse = await gameModel.getList()
@@ -35,8 +38,31 @@ class GameController {
     }
 
     private flipCard(el: HTMLElement):void {
+        if(this.isChecking || el.classList.contains('active')) {
+            return
+        }
+
         el.classList.add('active')
-        console.log(el);
+        this.arrFlipped.push(el)
+        
+        if(this.arrFlipped.length === 2) {
+            this.isChecking = true
+            if(this.arrFlipped[0].innerHTML === this.arrFlipped[1].innerHTML) {
+                this.pairs++
+                this.arrFlipped = []    
+                this.isChecking = false            
+                if(this.pairs === this.numCards) {
+                    console.log('Game over');
+                    
+                }
+            } else {
+                setTimeout(() => {
+                  this.arrFlipped.forEach(item => item.classList.remove('active'))  
+                  this.arrFlipped = []
+                  this.isChecking = false
+                }, 1400)
+            }
+        }
         
     }
 }
