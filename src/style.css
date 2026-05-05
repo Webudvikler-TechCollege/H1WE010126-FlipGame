@@ -1,1 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap");
 @import 'tailwindcss';
+
+@theme {
+    --color-main: #fff;
+    --font-luckiest: "Luckiest Guy"
+}
+
+@layer base {
+    body {
+        @apply m-0 pt-4 flex flex-col justify-center items-center bg-[url(./src/assets/images/moroccan-flower-dark.png)]
+    }
+
+    h1 {
+        @apply text-4xl font-luckiest font-bold mb-4 text-black
+    }
+}
+
+@layer components {
+    .gameboard {
+        @apply grid grid-rows-6 grid-cols-6 gap-[4px] [perspective:1000px] h-screen aspect-square
+    }
+
+    .flipcard {
+        transform-style: preserve-3d;
+        transition: transform 0.6s;
+        @apply border-1 border-black relative shadow-md
+    }
+
+    .flipcard.active {
+        transform: rotateX(-180deg);
+    }
+
+    .flipcard > div {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+
+    .flipcard > img {
+        transform: rotateX(180deg);
+        @apply absolute;
+    }
+
+    .flipcard-back {
+        @apply bg-[url("./src/assets/images/cardbg/abstrakt-tile.jpg")] absolute h-full w-full cursor-pointer
+    }
+}
